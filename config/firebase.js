@@ -1,8 +1,8 @@
-import { initializeApp } from 'firebase/app';
-import { getAuth } from 'firebase/auth';
-import { getFirestore } from 'firebase/firestore';
-import { getStorage } from 'firebase/storage';
-import Constants from 'expo-constants';
+import { initializeApp } from "firebase/app";
+import { getAuth } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
+import { getStorage } from "firebase/storage";
+import Constants from "expo-constants";
 
 // Firebase config
 const firebaseConfig = {
@@ -12,7 +12,7 @@ const firebaseConfig = {
   storageBucket: Constants.manifest.extra.storageBucket,
   messagingSenderId: Constants.manifest.extra.messagingSenderId,
   appId: Constants.manifest.extra.appId,
-  databaseURL: Constants.manifest.extra.databaseURL
+  databaseURL: Constants.manifest.extra.databaseURL,
 };
 
 // initialize firebase

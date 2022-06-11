@@ -1,60 +1,74 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
-import MyTabs from './navigation/MyTabs';
-import { useAssets } from 'expo-asset';
-import { useEffect, useState } from 'react';
-import { onAuthStateChanged } from 'firebase/auth';
-import { auth } from './config/firebase';
-import ContextWrapper from './context/ContextWrapper';
+import React, { useCallback, useEffect, useState } from "react";
+import { View, StyleSheet } from "react-native";
+import * as SplashScreen from "expo-splash-screen";
+import { useAssets } from "expo-asset";
+import * as Font from "expo-font";
 
-function App() {
-  const [currUser, setCurrUser] = useState(null)
-  const [loading, setLoading] = useState(true)
+// from previous version NOTE
+// import { onAuthStateChanged } from "firebase/auth";
+// import { auth } from "./config/firebase";
+
+import MainNavigator from "./navigation/MainNavigator";
+
+export default function App() {
+  const [appIsReady, setAppIsReady] = useState(false);
+
+  // from previous version NOTE
+  // const [currUser, setCurrUser] = useState(null)
+  // const [loading, setLoading] = useState(true)
+  // useEffect(() => {
+  //   const unsubcribe = onAuthStateChanged(auth, user => {
+  //     setLoading(false);
+  //     if (user) {
+  //       setCurrUser(user);
+  //     }
+  //   });
+  //   return () => unsubcribe()
+  // }, []);
 
   useEffect(() => {
-    const unsubcribe = onAuthStateChanged(auth, user => {
-      setLoading(false);
-      if (user) {
-        setCurrUser(user);
-      }
-    });
-    return () => unsubcribe();
+    const prepareApp = () => {
+      SplashScreen.preventAutoHideAsync()
+        .then(() => {
+          return Font.loadAsync({
+            "open-sans": require("./assets/fonts/OpenSans-Regular.ttf"),
+            "open-sans-bold": require("./assets/fonts/OpenSans-Bold.ttf"),
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+        .finally(() => {
+          setAppIsReady(true);
+        });
+    };
+    prepareApp();
   }, []);
 
-  if (loading) {
-    return <Text>Loading...</Text>
+  const onLayoutRootView = useCallback(async () => {
+    if (appIsReady) {
+      await SplashScreen.hideAsync();
+    }
+  }, [appIsReady]);
+  const [assets] = useAssets(
+    require("./assets/icon-square.png"),
+    require("./assets/chatbg.png"),
+    require("./assets/user-icon.png")
+  );
+
+  if (!appIsReady || !assets) {
+    return null;
   }
 
   return (
-    <NavigationContainer>
-      <MyTabs/>
-    </NavigationContainer>
+    <View style={styles.rootView} onLayout={onLayoutRootView}>
+      <MainNavigator />
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  rootView: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
   },
 });
-
-function Main() {
-  const [assets] = useAssets(
-    require("./assets/icon-square.png"),
-    require("./assets/chatbg.png"),
-    require("./assets/user-icon.png"),
-  );
-  if (!assets) {
-    return <Text>Loading ..</Text>;
-  }
-  return <ContextWrapper>
-    <App/>
-    </ContextWrapper>
-}
-
-export default Main;
-// npm run ios 

@@ -1,12 +1,11 @@
-
-import { Text, View } from 'react-native';
+import { Text, View } from "react-native";
 
 function HomeScreen() {
-    return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Text>Hoimed!</Text>
-      </View>
-    );
-  }
+  return (
+    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+      <Text>Homed!</Text>
+    </View>
+  );
+}
 
 export default HomeScreen;
