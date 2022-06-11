@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
-import { HomeNavigator, AuthStackNavigator } from "./AppNavigator";
+import { HomeNavigator, AuthNavigator } from "./AppNavigator";
 
 const MainNavigator = (props) => {
   // for now, a dummy useState to control screens user see
@@ -9,7 +9,7 @@ const MainNavigator = (props) => {
 
   return (
     <NavigationContainer>
-      {isLoggedIn ? <HomeNavigator /> : <AuthStackNavigator />}
+      {isLoggedIn ? <HomeNavigator /> : <AuthNavigator />}
     </NavigationContainer>
   );
 };

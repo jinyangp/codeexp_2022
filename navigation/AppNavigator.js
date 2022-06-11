@@ -8,6 +8,7 @@ import ExploreScreen from "../components/screens/ExploreScreen";
 import HomeScreen from "../components/screens/HomeScreen";
 
 // admin related
+import ProfileScreen from "../components/screens/ProfileScreen";
 import SettingsScreen from "../components/screens/SettingsScreen";
 import HistoryScreen from "../components/screens/HistoryScreen";
 
@@ -43,6 +44,7 @@ const AdminStackNavigator = createStackNavigator();
 const AdminNavigator = () => {
   return (
     <AdminStackNavigator.Navigator>
+      <AdminStackNavigator.Screen name="Profile" component={ProfileScreen} />
       <AdminStackNavigator.Screen name="Settings" component={SettingsScreen} />
       <AdminStackNavigator.Screen name="History" component={HistoryScreen} />
     </AdminStackNavigator.Navigator>
