@@ -6,24 +6,25 @@ import { useAssets } from 'expo-asset';
 import { useEffect, useState } from 'react';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from './config/firebase';
+import ContextWrapper from './context/ContextWrapper';
 
 function App() {
-  // const [currUser, setCurrUser] = useState(null)
-  // const [loading, setLoading] = useState(true)
+  const [currUser, setCurrUser] = useState(null)
+  const [loading, setLoading] = useState(true)
 
-  // useEffect(() => {
-  //   const unsubcribe = onAuthStateChanged(auth, user => {
-  //     setLoading(false);
-  //     if (user) {
-  //       setCurrUser(user);
-  //     }
-  //   });
-  //   return () => unsubcribe()
-  // }, []);
+  useEffect(() => {
+    const unsubcribe = onAuthStateChanged(auth, user => {
+      setLoading(false);
+      if (user) {
+        setCurrUser(user);
+      }
+    });
+    return () => unsubcribe();
+  }, []);
 
-  // if (loading) {
-  //   return <Text>Loading...</Text>
-  // }
+  if (loading) {
+    return <Text>Loading...</Text>
+  }
 
   return (
     <NavigationContainer>
@@ -50,7 +51,9 @@ function Main() {
   if (!assets) {
     return <Text>Loading ..</Text>;
   }
-  return <App/>
+  return <ContextWrapper>
+    <App/>
+    </ContextWrapper>
 }
 
 export default Main;
