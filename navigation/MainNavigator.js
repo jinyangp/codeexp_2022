@@ -1,15 +1,46 @@
-import React, { useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { NavigationContainer } from "@react-navigation/native";
-import { HomeNavigator, AuthStackNavigator } from "./AppNavigator";
+import { HomeNavigator, AuthNavigator } from "./AppNavigator";
+
+// firebase dependecies
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "../config/firebase";
+
+// get global context
+import Context from "../context/Context";
 
 const MainNavigator = (props) => {
-  // for now, a dummy useState to control screens user see
-  // should change to redux's state in the future
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const [error, setError] = useState(null);
+  const globalContext = useContext(Context);
+
+  // Event listener to listen whether a user is logged in
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      try {
+        // If there's a user, there's a user logged in
+        if (user) {
+          globalContext.globalValues.login();
+        }
+      } catch (err) {
+        setError(err);
+        console.log(err);
+      }
+    });
+
+    return () => unsubscribe();
+  });
+
+  useEffect(() => {
+    console.log(globalContext.globalValues.isAuth);
+  }, [globalContext.globalValues.isAuth]);
 
   return (
     <NavigationContainer>
-      {isLoggedIn ? <HomeNavigator /> : <AuthStackNavigator />}
+      {globalContext.globalValues.isAuth ? (
+        <HomeNavigator />
+      ) : (
+        <AuthNavigator />
+      )}
     </NavigationContainer>
   );
 };

@@ -1,8 +1,5 @@
-import { theme } from "../utils";
-import React from 'react';
+import React from "react";
 
-const GlobalContext = React.createContext({
-    theme,
-});
+const Context = React.createContext();
 
-export default GlobalContext;
+export default Context;

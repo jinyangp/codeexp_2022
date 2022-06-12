@@ -3,13 +3,12 @@ import { View, StyleSheet } from "react-native";
 import * as SplashScreen from "expo-splash-screen";
 import { useAssets } from "expo-asset";
 import * as Font from "expo-font";
+import ContextWrapper from "./context/ContextWrapper";
 
 // from previous version NOTE
 // import { onAuthStateChanged } from "firebase/auth";
 // import { auth } from "./config/firebase";
-// add Logbox here to suppress async error? 
-
-
+// add Logbox here to suppress async error?
 
 import MainNavigator from "./navigation/MainNavigator";
 
@@ -51,9 +50,11 @@ export default function App() {
   }
 
   return (
-    <View style={styles.rootView} onLayout={onLayoutRootView}>
-      <MainNavigator />
-    </View>
+    <ContextWrapper>
+      <View style={styles.rootView} onLayout={onLayoutRootView}>
+        <MainNavigator />
+      </View>
+    </ContextWrapper>
   );
 }
 

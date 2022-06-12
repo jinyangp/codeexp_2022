@@ -1,12 +1,31 @@
+import React, { useContext } from "react";
+import { Button, Text, View } from "react-native";
+import Context from "../../context/Context";
 
-import { Text, View } from 'react-native';
+// to access sign out function
+import { auth } from "../../config/firebase";
 
 function SettingsScreen() {
-    return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Text>Settings!</Text>
-      </View>
-    );
-  }
+  const globalContext = useContext(Context);
+
+  return (
+    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+      <Text>Settings!</Text>
+      <Button
+        title="Log out"
+        onPress={() => {
+          auth
+            .signOut()
+            .then(() => {
+              globalContext.globalValues.logout();
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        }}
+      />
+    </View>
+  );
+}
 
 export default SettingsScreen;
