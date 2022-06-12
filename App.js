@@ -7,24 +7,14 @@ import * as Font from "expo-font";
 // from previous version NOTE
 // import { onAuthStateChanged } from "firebase/auth";
 // import { auth } from "./config/firebase";
+// add Logbox here to suppress async error? 
+
+
 
 import MainNavigator from "./navigation/MainNavigator";
 
 export default function App() {
   const [appIsReady, setAppIsReady] = useState(false);
-
-  // from previous version NOTE
-  // const [currUser, setCurrUser] = useState(null)
-  // const [loading, setLoading] = useState(true)
-  // useEffect(() => {
-  //   const unsubcribe = onAuthStateChanged(auth, user => {
-  //     setLoading(false);
-  //     if (user) {
-  //       setCurrUser(user);
-  //     }
-  //   });
-  //   return () => unsubcribe()
-  // }, []);
 
   useEffect(() => {
     const prepareApp = () => {
