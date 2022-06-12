@@ -6,10 +6,12 @@ import ChatScreen from "../components/screens/ChatScreen";
 import CreateGroup from "../components/screens/CreateGroup";
 import ExploreScreen from "../components/screens/ExploreScreen";
 import HomeScreen from "../components/screens/HomeScreen";
+import MainRoom from "../components/screens/Room/MainRoom";
 
 // admin related
 import SettingsScreen from "../components/screens/SettingsScreen";
 import HistoryScreen from "../components/screens/HistoryScreen";
+import ProfileScreen from "../components/screens/ProfileScreen";
 
 // auth related
 import Login from "../components/screens/Login";
@@ -32,6 +34,7 @@ const GroupBuyNavigator = () => {
       />
       <GroupBuyStackNavigator.Screen name="Explore" component={ExploreScreen} />
       <GroupBuyStackNavigator.Screen name="Chat" component={ChatScreen} />
+      <GroupBuyStackNavigator.Screen name="Room" component={MainRoom} />
     </GroupBuyStackNavigator.Navigator>
   );
 };
@@ -43,6 +46,7 @@ const AdminStackNavigator = createStackNavigator();
 const AdminNavigator = () => {
   return (
     <AdminStackNavigator.Navigator>
+      <AdminStackNavigator.Screen name="Profile" component={ProfileScreen} />
       <AdminStackNavigator.Screen name="Settings" component={SettingsScreen} />
       <AdminStackNavigator.Screen name="History" component={HistoryScreen} />
     </AdminStackNavigator.Navigator>
@@ -78,7 +82,7 @@ export const HomeNavigator = () => {
     >
       <HomeTabsNavigator.Screen name="Home" component={GroupBuyNavigator} />
       <HomeTabsNavigator.Screen name="Admin" component={AdminNavigator} />
-      <HomeTabsNavigator.Screen name="chat" component={ChatScreen} /> 
+      <HomeTabsNavigator.Screen name="chat" component={ChatScreen} />
       {/* remove this later */}
     </HomeTabsNavigator.Navigator>
   );
