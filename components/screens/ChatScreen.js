@@ -30,10 +30,7 @@ function ChatScreen() {
     return () => unsubscribe();
   }, [])
   
-  // const chatsQuery = query(
-  //   collection(db, "rooms"),
-  //   where("participantsArray", "array-contains", )
-  // )
+ 
     async function readUser() {
       const user = await AsyncStorage.getItem('user')
       if (user) {

@@ -5,6 +5,9 @@ import { theme } from "../utils";
 export default function ContextWrapper(props) {
   // to control log in / log out
   const [isAuth, setIsAuth] = useState(false);
+  const [rooms, setRooms] = useState([]);
+  const [unfilteredRooms, setUnfilteredRooms] = useState([]);
+  
   const globalValues = {
     isAuth: isAuth,
     login: () => {
@@ -17,7 +20,7 @@ export default function ContextWrapper(props) {
   };
 
   return (
-    <Context.Provider value={{ globalValues }}>
+    <Context.Provider value={{ globalValues,rooms, setRooms }}>
       {props.children}
     </Context.Provider>
   );
