@@ -6,6 +6,7 @@ import ChatScreen from "../components/screens/ChatScreen";
 import CreateGroup from "../components/screens/CreateGroup";
 import ExploreScreen from "../components/screens/ExploreScreen";
 import HomeScreen from "../components/screens/HomeScreen";
+import MainRoom from "../components/screens/Room/MainRoom";
 
 // admin related
 import ProfileScreen from "../components/screens/ProfileScreen";
@@ -33,6 +34,7 @@ const GroupBuyNavigator = () => {
       />
       <GroupBuyStackNavigator.Screen name="Explore" component={ExploreScreen} />
       <GroupBuyStackNavigator.Screen name="Chat" component={ChatScreen} />
+      <GroupBuyStackNavigator.Screen name="Room" component={MainRoom} />
     </GroupBuyStackNavigator.Navigator>
   );
 };
