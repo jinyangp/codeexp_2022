@@ -8,60 +8,39 @@ import {
   FlatList,
 } from "react-native";
 import { palette, theme } from "../../utils";
+import { FontAwesome } from '@expo/vector-icons'; 
 
-const testData = [
-  {
-    storeName: "McDonalds",
-    percentCompleted: "80%",
-    deliverTo: "Kranji Camp",
-  },
-  {
-    storeName: "KFC",
-    percentCompleted: "50%",
-    deliverTo: "Maju Camp",
-  },
-  {
-    storeName: "KFC",
-    percentCompleted: "50%",
-    deliverTo: "Maju Camp",
-  },
-  {
-    storeName: "KFC",
-    percentCompleted: "50%",
-    deliverTo: "Maju Camp",
-  },
-  {
-    storeName: "KFC",
-    percentCompleted: "50%",
-    deliverTo: "Maju Camp",
-  },
-  {
-    storeName: "KFC",
-    percentCompleted: "50%",
-    deliverTo: "Maju Camp",
-  },
-  {
-    storeName: "KFC",
-    percentCompleted: "50%",
-    deliverTo: "Maju Camp",
-  },
-  {
-    storeName: "McDonalds",
-    percentCompleted: "80%",
-    deliverTo: "Kranji Camp",
-  },
-  {
-    storeName: "McDonalds",
-    percentCompleted: "80%",
-    deliverTo: "Kranji Camp",
-  },
-];
-
-function HomeScreen({ navigation }) {
+function HomeScreen({ route, navigation }) {
   const [deliverToValue, setDeliverToValue] = useState("");
   const [searchValue, setSearchValue] = useState("");
-  const [unfilteredData, setUnfilteredData] = useState(testData);
+  const [unfilteredData, setUnfilteredData] = useState([
+    {
+      storeName: "McDonalds",
+      percentCompleted: 80,
+      deliverTo: "Kranji Camp",
+      goal: 100,
+    },
+    {
+      storeName: "KFC",
+      percentCompleted: 50,
+      deliverTo: "Maju Camp",
+      goal: 54,
+    },
+  ]);
   const [filteredData, setFilteredData] = useState([]);
+
+  useEffect(() => {
+    if (route.params) {
+      const { storeName, deliverTo, goal } = route.params;
+      const newData = {
+        storeName: storeName,
+        percentCompleted: 0,
+        deliverTo: deliverTo,
+        goal: parseInt(goal),
+      }
+      setUnfilteredData([...unfilteredData, newData]);
+    }
+  }, [route.params]);
 
   useEffect(() => {
     setFilteredData(
@@ -75,16 +54,19 @@ function HomeScreen({ navigation }) {
 
   const renderItem = ({ item }) => {
     return (
-      <TouchableOpacity
+      <TouchableOpacity style={styles.listItem}
         onPress={() => {
           navigation.navigate("Room", { ...item });
         }}
       >
-        <Text style={styles.listItem}>
-          Store Name : {item.storeName} , Percentage : {item.percentCompleted} ,
-          To : {item.deliverTo}
-          //TODO
-        </Text>
+        <View style={styles.leftItem}>
+          <Text style={{fontSize: 30}}>{item.percentCompleted}%</Text>
+          <Text>complete</Text>
+        </View>
+        <View style={styles.rightItem}>
+          <Text style={styles.text}>Store: {item.storeName}</Text>
+          <Text style={styles.text}>To: {item.deliverTo}</Text>
+        </View>
       </TouchableOpacity>
     );
   };
@@ -92,14 +74,17 @@ function HomeScreen({ navigation }) {
   return (
     <View style={styles.container}>
       <View style={styles.headerContainer}>
-        <Text style={styles.headerText}>Food Qwest</Text>
+        <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: "center", width: "100%"}}>
+          <Text style={styles.headerText}>Food Qwest</Text>
+          <FontAwesome name="user-circle-o" size={40} color="grey" />
+        </View>
         <TextInput
           style={styles.input}
           placeholder="Search:"
           autoCapitalize="none"
           keyboardType="default"
           textContentType="none"
-          autoFocus={true}
+          // autoFocus={true}
           value={searchValue}
           onChangeText={(text) => setSearchValue(text)}
         />
@@ -109,7 +94,7 @@ function HomeScreen({ navigation }) {
           autoCapitalize="none"
           keyboardType="default"
           textContentType="none"
-          autoFocus={true}
+          // autoFocus={true}
           value={deliverToValue}
           onChangeText={(text) => setDeliverToValue(text)}
         />
@@ -122,11 +107,11 @@ function HomeScreen({ navigation }) {
       <View style={styles.footerContainer}>
         <TouchableOpacity
           onPress={() => {
-            navigation.navigate("CreateGroup");
+            navigation.navigate("Create Room");
           }}
           style={styles.button}
         >
-          <Text style={styles.buttonText}>Create A Party</Text>
+          <Text style={styles.buttonText}>Create A Room</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -139,22 +124,20 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    paddingTop: 10,
+    paddingTop: 20,
     paddingHorizontal: 12,
   },
   headerContainer: {
     padding: 20,
     alignItems: "flex-start",
     paddingBottom: 10,
-    borderBottomColor: "lightgrey",
-    borderBottomWidth: 2,
   },
   headerText: {
     color: theme.colors.text,
     fontSize: 40,
   },
   input: {
-    backgroundColor: "#fff",
+    backgroundColor: "#FFE8B7",
     marginVertical: 10,
     fontSize: 16,
     borderWidth: 1,
@@ -165,27 +148,38 @@ const styles = StyleSheet.create({
   },
   footerContainer: {
     padding: 20,
-    borderTopColor: "lightgrey",
-    borderTopWidth: 2,
   },
   button: {
-    backgroundColor: theme.colors.secondary,
+    backgroundColor: '#FA6E59',
     padding: 10,
     borderRadius: 10,
   },
   buttonText: {
-    color: "black",
+    color: 'white',
     alignSelf: "center",
     fontSize: 20,
   },
   listItem: {
-    padding: 20,
-    borderBottomColor: "lightgrey",
+    padding: 10,
+    borderBottomColor: "#fff",
     borderBottomWidth: 1,
-    fontSize: 15,
-    color: theme.colors.secondaryText,
+    flexDirection: "row",
+  },
+  leftItem: {
+    width: "20%",
+    alignItems: 'center',
+  },
+  rightItem: {
+    justifyContent: 'center',
+    paddingHorizontal: 20,
   },
   bodyContainer: {
     flex: 1,
+    backgroundColor: '#FFCF54',
+    borderRadius: 20,
   },
+  text: {
+    fontSize: 20,
+    color: theme.colors.text,
+  }
 });

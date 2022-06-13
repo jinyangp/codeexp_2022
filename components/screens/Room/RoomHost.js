@@ -22,24 +22,30 @@ function RoomHost({ data }) {
       amount: 4,
     },
     {
-      foodName: "Roti Prata",
-      amount: 11,
+      foodName: "Plain Roti Prata",
+      amount: 5,
+    },
+    {
+      foodName: "Roti Prata with Egg",
+      amount: 6,
     },
   ]);
+  
+  // Hacky code for demoing the data
+  const [totalAmount, setTotalAmount] = useState(info.goal);
+  const [currAmount, setCurrAmount] = useState(Math.round(info.percentCompleted / 100 * info.goal));
+  const [percent, setPercent] = useState(info.percentCompleted / 100);
 
-  const [totalAmount, setTotalAmount] = useState(54);
-  const [currAmount, setCurrAmount] = useState(27);
-  const [percent, setPercent] = useState(0);
-
-  useEffect(() => {
-    setPercent(currAmount / totalAmount);
-  }, [currAmount]);
+  // Keep this code for later use
+  // useEffect(() => {
+  //   setPercent(currAmount / totalAmount);
+  // }, [currAmount]);
 
   const renderItem = ({ item }) => {
     return (
       <TouchableOpacity
         onPress={() => {
-          console.log("Go to order");
+          console.log(item);
         }}
       >
         <Text style={styles.listItem}>
@@ -48,6 +54,15 @@ function RoomHost({ data }) {
       </TouchableOpacity>
     );
   };
+
+  const addOrder = () => {
+    const newOrder = {
+      foodName: "Sample Order",
+      amount: 1,
+    };
+
+    setOrders([...orders, newOrder]);
+  }
 
   return (
     <View style={styles.container}>
@@ -60,15 +75,11 @@ function RoomHost({ data }) {
           <Text style={styles.text}>To: </Text>
           <Text style={styles.text}>{info.deliverTo}</Text>
         </View>
-        <View style={{ flexDirection: "row", alignItems: "center" }}>
-          <Text style={styles.text}>From: </Text>
-          <Text style={styles.text}>current location //TODO?</Text>
-        </View>
       </View>
 
       <View style={styles.bodyContainer}>
         <View style={styles.statusContainer}>
-          <Text>
+          <Text style={{alignSelf:"center"}}>
             ${currAmount} / ${totalAmount}
           </Text>
           <View style={styles.statusBar}>
@@ -76,14 +87,14 @@ function RoomHost({ data }) {
               style={{
                 backgroundColor: "blue",
                 borderRadius: 10,
-                height: `${Math.floor(percent * 100).toString()}%`,
+                height: `${Math.floor(percent * 100)}%`,
               }}
             />
           </View>
         </View>
 
         <View style={styles.orderContainer}>
-          <Text style={styles.text}>Orders</Text>
+          <Text style={{fontSize: 30, color: theme.colors.text,}}>Orders</Text>
           <FlatList data={orders} renderItem={renderItem} />
         </View>
       </View>
@@ -96,7 +107,7 @@ function RoomHost({ data }) {
             color="black"
           />
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => console.log("Add/ Edit order")}>
+        <TouchableOpacity onPress={addOrder}>
           <Ionicons name="add-circle-outline" size={40} color="black" />
         </TouchableOpacity>
         <TouchableOpacity onPress={() => navigation.navigate("Chat")}>
@@ -119,9 +130,8 @@ const styles = StyleSheet.create({
   headerContainer: {
     padding: 20,
     alignItems: "flex-start",
-    paddingBottom: 10,
-    borderBottomColor: "lightgrey",
-    borderBottomWidth: 2,
+    backgroundColor: '#FFCF54',
+    borderRadius: 20,
   },
   bodyContainer: {
     flex: 1,
@@ -131,10 +141,10 @@ const styles = StyleSheet.create({
   },
   footerContainer: {
     padding: 20,
-    borderTopColor: "lightgrey",
-    borderTopWidth: 2,
     flexDirection: "row",
     justifyContent: "space-around",
+    backgroundColor: '#FFCF54',
+    borderRadius: 20,
   },
   orderContainer: {
     padding: 20,
@@ -155,7 +165,7 @@ const styles = StyleSheet.create({
   },
   text: {
     marginVertical: 4,
-    fontColor: theme.colors.text,
+    color: theme.colors.text,
     fontSize: 20,
   },
   listItem: {

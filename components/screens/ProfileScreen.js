@@ -5,7 +5,6 @@ export default function ProfileScreen({ navigation }) {
   return (
     <View style={styles.container}>
       <View style={styles.headerContainer}>
-        <Text style={[styles.text, styles.headerText]}>Insert Name</Text>
       </View>
 
       <View>
