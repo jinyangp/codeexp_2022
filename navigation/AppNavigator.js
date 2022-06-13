@@ -82,8 +82,6 @@ export const HomeNavigator = () => {
     >
       <HomeTabsNavigator.Screen name="Home" component={GroupBuyNavigator} />
       <HomeTabsNavigator.Screen name="Admin" component={AdminNavigator} />
-      <HomeTabsNavigator.Screen name="chat" component={ChatScreen} />
-      {/* remove this later */}
     </HomeTabsNavigator.Navigator>
   );
 };
