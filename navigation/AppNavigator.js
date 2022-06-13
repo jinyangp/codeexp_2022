@@ -1,5 +1,6 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 // group buy related
 import ChatScreen from "../components/screens/ChatScreen";
@@ -80,8 +81,10 @@ export const HomeNavigator = () => {
         headerShown: false,
       }}
     >
-      <HomeTabsNavigator.Screen name="Home" component={GroupBuyNavigator} />
-      <HomeTabsNavigator.Screen name="Admin" component={AdminNavigator} />
+      <HomeTabsNavigator.Screen name="Home" component={GroupBuyNavigator} 
+      options={{tabBarLabel: 'Home', tabBarIcon: () => (<MaterialCommunityIcons name="home" color={'black'} size={30}/>)}}/>
+      <HomeTabsNavigator.Screen name="Admin" component={AdminNavigator}
+      options={{tabBarLabel: 'Admin', tabBarIcon: () => (<MaterialCommunityIcons name="apps" color={'black'} size={30}/>)}}/>
     </HomeTabsNavigator.Navigator>
   );
 };
