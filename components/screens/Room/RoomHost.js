@@ -146,8 +146,12 @@ function RoomHost({ data }) {
       <View style={styles.container}>
       <View style={styles.headerContainer}>
         <View style={{ flexDirection: "column", alignItems: "flex-end"}}>
-          <Text style={[styles.text, styles.textBold]}>Store: </Text>
-          <Text style={[styles.text, styles.textBold]}>To: </Text>
+          <View style={{marginVertical: 5}}>
+            <Text style={[styles.text, styles.textBold]}>Store: </Text>
+          </View>
+          <View style={{marginVertical: 5}}>
+            <Text style={[styles.text, styles.textBold]}>To: </Text>
+          </View>
         </View>
         <View style={{ flexDirection: "column", alignItems: "flex-start", flex: 1}}>
           <View style={styles.textBox}>
@@ -328,7 +332,8 @@ const styles = StyleSheet.create({
     borderWidth: .5, 
     borderColor: '#333',
     borderRadius: 8, 
-    justifyContent: "center"
+    justifyContent: "center",
+    marginVertical: 5,
   },
   listItem: {
     padding: 20,
