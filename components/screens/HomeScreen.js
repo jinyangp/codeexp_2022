@@ -1,4 +1,8 @@
 import React, { useEffect, useState } from "react";
+import {collection, query, orderBy, onSnapshot} from "firebase/firestore";
+import {db} from '../../config/firebase';
+
+
 import {
   Text,
   View,
@@ -13,59 +17,47 @@ import { FontAwesome } from '@expo/vector-icons';
 function HomeScreen({ route, navigation }) {
   const [deliverToValue, setDeliverToValue] = useState("");
   const [searchValue, setSearchValue] = useState("");
-  const [unfilteredData, setUnfilteredData] = useState([
-    {
-      storeName: "McDonalds",
-      percentCompleted: 80,
-      deliverTo: "Kranji Camp",
-      goal: 100,
-    },
-    {
-      storeName: "KFC",
-      percentCompleted: 50,
-      deliverTo: "Maju Camp",
-      goal: 54,
-    },
-  ]);
+
+
+  const [rooms, setRooms] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
 
+
+
   useEffect(() => {
-    if (route.params) {
-      const { storeName, deliverTo, goal } = route.params;
-      const newData = {
-        storeName: storeName,
-        percentCompleted: 0,
-        deliverTo: deliverTo,
-        goal: parseInt(goal),
-      }
-      setUnfilteredData([...unfilteredData, newData]);
-    }
-  }, [route.params]);
+    const q = query(collection(db, 'rooms'), orderBy('created', 'desc'))
+    onSnapshot(q, (querySnapshot) => {
+      setRooms(querySnapshot.docs.map(doc => ({
+        id: doc.id,
+        data: doc.data()
+      })))
+    })
+  },[])
 
   useEffect(() => {
     setFilteredData(
-      unfilteredData.filter(
+      rooms.filter(
         (item) =>
-          item.storeName.toLowerCase().includes(searchValue.toLowerCase()) &&
-          item.deliverTo.toLowerCase().includes(deliverToValue.toLowerCase())
+          item.data.storeName.toLowerCase().includes(searchValue.toLowerCase()) &&
+          item.data.deliverTo.toLowerCase().includes(deliverToValue.toLowerCase())
       )
     );
-  }, [searchValue, deliverToValue, unfilteredData]);
+  }, [searchValue, deliverToValue, rooms]);
 
   const renderItem = ({ item }) => {
     return (
       <TouchableOpacity style={styles.listItem}
         onPress={() => {
-          navigation.navigate("Room", { ...item });
+          navigation.navigate("Room",  item.id );
         }}
       >
         <View style={styles.leftItem}>
-          <Text style={{fontSize: 30}}>{item.percentCompleted}%</Text>
+          <Text style={{fontSize: 30}}>{Math.min(100,parseInt((item.data.currentAmount / item.data.goal)  * 100))}%</Text>
           <Text>complete</Text>
         </View>
         <View style={styles.rightItem}>
-          <Text style={styles.text}>Store: {item.storeName}</Text>
-          <Text style={styles.text}>To: {item.deliverTo}</Text>
+          <Text style={styles.text}>Store: {item.data.storeName}</Text>
+          <Text style={styles.text}>To: {item.data.deliverTo}</Text>
         </View>
       </TouchableOpacity>
     );

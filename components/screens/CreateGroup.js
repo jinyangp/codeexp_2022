@@ -1,22 +1,53 @@
 import React, {useState} from 'react';
 import { Text, View, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
+import {db} from '../../config/firebase';
+import {collection, addDoc, Timestamp} from 'firebase/firestore'
+
 
 function CreateGroup({ navigation }) {
   const [store, setStore] = useState("");
   const [destination, setDestination] = useState("");
   const [goal, setGoal] = useState("");
 
-  const handleSubmit = () => {
-    if (store && destination && goal) {
-      navigation.navigate("HomeStack", {
+  // const handleSubmit = () => {
+  //   if (store && destination && goal) {
+  //     navigation.navigate("HomeStack", {
+  //       storeName: store,
+  //       deliverTo: destination,
+  //       goal: goal,
+  //     });
+  //   } else {
+  //     alert("Please fill in all the fields");
+  //   }
+  // };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    try {
+      await addDoc(collection(db, 'rooms'), {
         storeName: store,
         deliverTo: destination,
         goal: goal,
-      });
-    } else {
-      alert("Please fill in all the fields");
+        orders: [
+          {
+            foodName: "Curry Fish Head",
+            amount: 1,
+            price: 2,
+          },
+          {
+            foodName: "Chicken Rice",
+            amount: 4,
+            price: 3,
+          },
+        ],
+        currentAmount: 23,
+        created: Timestamp.now()
+      })
+      // onClose()
+    } catch (err) {
+      alert(err)
     }
-  };
+  }
 
     return (
       <View style={styles.container}>

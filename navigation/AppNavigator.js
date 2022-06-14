@@ -28,7 +28,7 @@ const GroupBuyStackNavigator = createStackNavigator();
 const GroupBuyNavigator = () => {
   return (
     <GroupBuyStackNavigator.Navigator>
-      <GroupBuyStackNavigator.Screen name="HomeStack" options={{headerShown: false}} component={HomeScreen} />
+      <GroupBuyStackNavigator.Screen name="Back" options={{headerShown: false}} component={HomeScreen} />
       <GroupBuyStackNavigator.Screen
         name="Create Room"
         component={CreateGroup}

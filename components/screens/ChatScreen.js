@@ -45,7 +45,6 @@ function ChatScreen() {
       
       await AsyncStorage.setItem('user', JSON.stringify(user))
       setUser(user)
-      console.log(user.name)
     }
 
     const onSend = useCallback((messages = []) => {
