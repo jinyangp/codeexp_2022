@@ -66,10 +66,6 @@ function HomeScreen({ route, navigation }) {
   return (
     <View style={styles.container}>
       <View style={styles.headerContainer}>
-        <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: "center", width: "100%"}}>
-          <Text style={styles.headerText}>Food Qwest</Text>
-          <FontAwesome name="user-circle-o" size={40} color="grey" />
-        </View>
         <TextInput
           style={styles.input}
           placeholder="Search:"
@@ -96,7 +92,7 @@ function HomeScreen({ route, navigation }) {
         <FlatList data={filteredData} renderItem={renderItem} />
       </View>
 
-      <View style={styles.footerContainer}>
+      <View>
         <TouchableOpacity
           onPress={() => {
             navigation.navigate("Create Room");
@@ -105,6 +101,14 @@ function HomeScreen({ route, navigation }) {
         >
           <Text style={styles.buttonText}>Create A Room</Text>
         </TouchableOpacity>
+      <View style={styles.footerContainer}>
+        <TouchableOpacity>
+          <FontAwesome name="navicon" size={30} color="grey" />
+        </TouchableOpacity>
+        <TouchableOpacity>
+          <FontAwesome name="user-circle-o" size={40} color="black" />
+        </TouchableOpacity>
+      </View>
       </View>
     </View>
   );
@@ -116,20 +120,21 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    paddingTop: 20,
-    paddingHorizontal: 12,
   },
   headerContainer: {
     padding: 20,
+    paddingTop: 40,
     alignItems: "flex-start",
-    paddingBottom: 10,
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
+    backgroundColor: "#FFCF54",
   },
   headerText: {
     color: theme.colors.text,
     fontSize: 40,
   },
   input: {
-    backgroundColor: "#FFE8B7",
+    backgroundColor: "#fff",
     marginVertical: 10,
     fontSize: 16,
     borderWidth: 1,
@@ -139,12 +144,22 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   footerContainer: {
-    padding: 20,
+    padding: 10,
+    paddingHorizontal: 30,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    backgroundColor: "#FFCF54",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: 'center'
   },
   button: {
     backgroundColor: '#FA6E59',
     padding: 10,
     borderRadius: 10,
+    width: "80%",
+    alignSelf: "center",
+    marginBottom: 10,
   },
   buttonText: {
     color: 'white',
@@ -153,8 +168,8 @@ const styles = StyleSheet.create({
   },
   listItem: {
     padding: 10,
-    borderBottomColor: "#fff",
-    borderBottomWidth: 1,
+    borderBottomColor: "lightgrey",
+    borderBottomWidth: 2,
     flexDirection: "row",
   },
   leftItem: {
@@ -167,8 +182,8 @@ const styles = StyleSheet.create({
   },
   bodyContainer: {
     flex: 1,
-    backgroundColor: '#FFCF54',
-    borderRadius: 20,
+    padding: 10,
+    backgroundColor: "#fff",
   },
   text: {
     fontSize: 20,

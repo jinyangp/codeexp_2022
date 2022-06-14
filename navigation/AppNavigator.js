@@ -35,7 +35,7 @@ const GroupBuyNavigator = () => {
       />
       <GroupBuyStackNavigator.Screen name="Explore" component={ExploreScreen} />
       <GroupBuyStackNavigator.Screen name="Chat" component={ChatScreen} />
-      <GroupBuyStackNavigator.Screen name="Room" component={MainRoom} />
+      <GroupBuyStackNavigator.Screen name="Room" options={{headerShown: false}} component={MainRoom} />
     </GroupBuyStackNavigator.Navigator>
   );
 };
@@ -47,7 +47,7 @@ const AdminStackNavigator = createStackNavigator();
 const AdminNavigator = () => {
   return (
     <AdminStackNavigator.Navigator>
-      <AdminStackNavigator.Screen name="Profile" component={ProfileScreen} />
+      <AdminStackNavigator.Screen name="Profile" options={{headerShown: false}} component={ProfileScreen} />
       <AdminStackNavigator.Screen name="Settings" component={SettingsScreen} />
       <AdminStackNavigator.Screen name="History" component={HistoryScreen} />
     </AdminStackNavigator.Navigator>
@@ -82,9 +82,9 @@ export const HomeNavigator = () => {
       }}
     >
       <HomeTabsNavigator.Screen name="Home" component={GroupBuyNavigator} 
-      options={{tabBarLabel: 'Home', tabBarIcon: () => (<MaterialCommunityIcons name="home" color={'black'} size={30}/>)}}/>
+      options={{tabBarLabel: 'Home', tabBarIcon: ({color}) => (<MaterialCommunityIcons name="home" color={color} size={30}/>), tabBarActiveTintColor: "blue", tabBarInactiveTintColor: "grey"}}/>
       <HomeTabsNavigator.Screen name="Admin" component={AdminNavigator}
-      options={{tabBarLabel: 'Admin', tabBarIcon: () => (<MaterialCommunityIcons name="apps" color={'black'} size={30}/>)}}/>
+      options={{tabBarLabel: 'Admin', tabBarIcon: ({color}) => (<MaterialCommunityIcons name="apps" color={color} size={30}/>), tabBarActiveTintColor: "blue", tabBarInactiveTintColor: "grey"}}/>
     </HomeTabsNavigator.Navigator>
   );
 };

@@ -5,6 +5,7 @@ export default function ProfileScreen({ navigation }) {
   return (
     <View style={styles.container}>
       <View style={styles.headerContainer}>
+        <Text style={styles.headerText}>Food Qwest</Text>
       </View>
 
       <View>
@@ -30,7 +31,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    paddingTop: 10,
+    paddingTop: 60,
     paddingHorizontal: 12,
   },
   headerContainer: {

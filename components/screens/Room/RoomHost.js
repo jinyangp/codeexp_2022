@@ -7,7 +7,8 @@ import {
   FlatList,
   Modal,
   TextInput,
-  ActivityIndicator
+  ActivityIndicator,
+  Alert
   
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
@@ -144,13 +145,17 @@ function RoomHost({ data }) {
     roomInfo == null ?  <View style={styles.container}><ActivityIndicator size="large" /></View>: (
       <View style={styles.container}>
       <View style={styles.headerContainer}>
-        <View style={{ flexDirection: "row", alignItems: "center" }}>
-          <Text style={styles.text}>Store: </Text>
-          <Text style={styles.text}>{roomInfo.data.storeName}</Text>
+        <View style={{ flexDirection: "column", alignItems: "flex-end"}}>
+          <Text style={[styles.text, styles.textBold]}>Store: </Text>
+          <Text style={[styles.text, styles.textBold]}>To: </Text>
         </View>
-        <View style={{ flexDirection: "row", alignItems: "center" }}>
-          <Text style={styles.text}>To: </Text>
-          <Text style={styles.text}>{roomInfo.data.deliverTo}</Text>
+        <View style={{ flexDirection: "column", alignItems: "flex-start", flex: 1}}>
+          <View style={styles.textBox}>
+            <Text style={styles.text}>{roomInfo.data.storeName}</Text>
+          </View>
+          <View style={styles.textBox}>
+            <Text style={styles.text}>{roomInfo.data.deliverTo}</Text>
+          </View>
         </View>
       </View>
       <View style={styles.centeredView}>
@@ -179,7 +184,7 @@ function RoomHost({ data }) {
           style={styles.input}
           placeholder="Price:"
           autoCapitalize="none"
-          keyboardType="default"
+          keyboardType="phone-pad"
           textContentType="none"
           // autoFocus={true}
           value={price}
@@ -227,7 +232,7 @@ function RoomHost({ data }) {
         </View>
 
         <View style={styles.orderContainer}>
-          <Text style={{fontSize: 30, color: theme.colors.text,}}>Orders</Text>
+          <Text style={{fontSize: 25, color: theme.colors.secondaryText,}}>Orders</Text>
           <FlatList data={roomInfo.data.orders} renderItem={renderItem} />
           { roomInfo.data.completed ?            <TouchableOpacity
           onPress={handleDelete}
@@ -267,14 +272,15 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    paddingTop: 10,
-    paddingHorizontal: 12,
   },
   headerContainer: {
     padding: 20,
+    paddingTop: 40,
     alignItems: "flex-start",
-    backgroundColor: '#FFCF54',
-    borderRadius: 20,
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
+    backgroundColor: "#FFCF54",
+    flexDirection: "row"
   },
   bodyContainer: {
     flex: 1,
@@ -287,7 +293,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-around",
     backgroundColor: '#FFCF54',
-    borderRadius: 20,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
   },
   orderContainer: {
     padding: 20,
@@ -307,9 +314,21 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   text: {
-    marginVertical: 4,
-    color: theme.colors.text,
     fontSize: 20,
+    color: theme.colors.text,
+    marginVertical: 10,
+  },
+  textBold: {
+    fontWeight: "bold",
+  },
+  textBox: {
+    width:"100%", 
+    backgroundColor:"#fff", 
+    paddingHorizontal: 5, 
+    borderWidth: .5, 
+    borderColor: '#333',
+    borderRadius: 8, 
+    justifyContent: "center"
   },
   listItem: {
     padding: 20,
@@ -327,12 +346,13 @@ const styles = StyleSheet.create({
 
   modal: {
     width: "100%",
-    height: "50%",
+    height: 300,
     marginTop: "auto",
     alignItems: "center",
     justifyContent: "space-evenly",
     backgroundColor: "#FFCF54",
-    borderRadius: 20,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
   },
 
   title: {
@@ -344,7 +364,7 @@ const styles = StyleSheet.create({
   },
   input: {
     backgroundColor: "#FFE8B7",
-    marginBottom: 20,
+    marginBottom: 10,
     fontSize: 16,
     borderWidth: 1,
     borderColor: '#333',
