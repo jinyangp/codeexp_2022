@@ -6,27 +6,26 @@ import {
   TouchableOpacity,
   FlatList,
   Modal,
-  TextInput
+  TextInput,
+  ActivityIndicator
   
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { palette, theme } from "../../../utils";
 import {db} from '../../../config/firebase';
-import {collection, query, orderBy, onSnapshot, updateDoc, FieldValue, doc, arrayUnion, getDoc, docSnap} from "firebase/firestore";
+import {collection, query, orderBy, onSnapshot, updateDoc, doc, arrayUnion, getDoc, deleteDoc} from "firebase/firestore";
 
 
 function RoomHost({ data }) {
   const { info, navigation } = data;
 
   const [ roomInfo, setRoomInfo] = useState(null);
-  const [ percent, setPercent ] = useState(0);
   const [modalVisible, setModalVisible] = useState(false);
-  const [full, setFull] = useState(false);
 
   // form
   const [name, setName] = useState("");
-  const [price, setPrice] = useState(0);
-  const [quantity, setQuantity] = useState(0);
+  const [price, setPrice] = useState("");
+  const [quantity, setQuantity] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -58,21 +57,12 @@ function RoomHost({ data }) {
       })).filter(e => e.id == info)[0])
     })
 
+
     return () => cleanup;
 
 
   },[])
 
-  useEffect( () => {
-
-    if(roomInfo != null) {
-      setPercent(Math.min(1, roomInfo.data.currentAmount / roomInfo.data.goal));
-      if(percent >= 1) {
-        setFull(true);
-      }
-
-    }
-  }, [roomInfo])
 
 
   const renderItem = ({ item }) => {
@@ -109,11 +99,20 @@ function RoomHost({ data }) {
             return order;
           }
         })
+        let newCompleted = false;
+        if(roomInfo.data.currentAmount + newOrder.price * newOrder.amount >= roomInfo.data.goal) {
+          newCompleted = true;
+        }
         await updateDoc(roomsDocsRef, {
           orders: newArr ,
           currentAmount: roomInfo.data.currentAmount + newOrder.price * newOrder.amount,
+          completed: newCompleted,
         })
       } else { 
+        let newCompleted = false;
+        if(roomInfo.data.currentAmount + newOrder.price * newOrder.amount >= roomInfo.data.goal) {
+          newCompleted = true;
+        }
         await updateDoc(roomsDocsRef, {
           orders: arrayUnion({
             foodName: newOrder.foodName,
@@ -121,6 +120,7 @@ function RoomHost({ data }) {
             price: newOrder.price, 
           }),
           currentAmount: roomInfo.data.currentAmount + newOrder.price * newOrder.amount,
+          completed: newCompleted,
         })
       }
 
@@ -130,8 +130,18 @@ function RoomHost({ data }) {
     }    
   }
 
+  const handleDelete = async () => {
+    const roomsDocRef = doc(db, 'rooms', info)
+    try{
+      await deleteDoc(roomsDocRef)
+      navigation.goBack();
+    } catch (err) {
+      alert(err)
+    }
+  }
+
   return (
-    roomInfo == null ?  <View style={styles.container}><Text>Loading</Text></View>: (
+    roomInfo == null ?  <View style={styles.container}><ActivityIndicator size="large" /></View>: (
       <View style={styles.container}>
       <View style={styles.headerContainer}>
         <View style={{ flexDirection: "row", alignItems: "center" }}>
@@ -208,9 +218,9 @@ function RoomHost({ data }) {
           <View style={styles.statusBar}>
             <View
               style={{
-                backgroundColor:`${full ? "#4897D8" : "#FA6E59" }`,
+                backgroundColor:`${roomInfo.data.completed ? "#4897D8" : "#FA6E59" }`,
                 borderRadius: 10,
-                height: `${Math.floor(percent* 100)}%`,
+                height: `${Math.min(100, ((roomInfo.data.currentAmount / roomInfo.data.goal )* 100))}%`,
               }}
             />
           </View>
@@ -219,6 +229,13 @@ function RoomHost({ data }) {
         <View style={styles.orderContainer}>
           <Text style={{fontSize: 30, color: theme.colors.text,}}>Orders</Text>
           <FlatList data={roomInfo.data.orders} renderItem={renderItem} />
+          { roomInfo.data.completed ?            <TouchableOpacity
+          onPress={handleDelete}
+          style={styles.button}
+        >
+          <Text style={styles.buttonText}>Close room</Text>
+        </TouchableOpacity>: null }
+
         </View>
       </View>
 

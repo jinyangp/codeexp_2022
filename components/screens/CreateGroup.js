@@ -30,6 +30,7 @@ function CreateGroup({ navigation }) {
         goal: goal,
         orders: [],
         currentAmount: 0,
+        completed: false,
         created: Timestamp.now()
       })
       navigation.goBack();
