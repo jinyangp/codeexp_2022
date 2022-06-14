@@ -18,9 +18,10 @@ import {collection, query, orderBy, onSnapshot, updateDoc, FieldValue, doc, arra
 function RoomHost({ data }) {
   const { info, navigation } = data;
 
-  const [ roomInfo, setRoomInfo] = useState();
+  const [ roomInfo, setRoomInfo] = useState(null);
   const [ percent, setPercent ] = useState(0);
   const [modalVisible, setModalVisible] = useState(false);
+  const [full, setFull] = useState(false);
 
   // form
   const [name, setName] = useState("");
@@ -50,56 +51,29 @@ function RoomHost({ data }) {
 
     const q = query(collection(db, 'rooms'), orderBy('created', 'desc'))
 
-    onSnapshot(q, (querySnapshot) => {
+    const cleanup = onSnapshot(q, (querySnapshot) => {
       setRoomInfo(querySnapshot.docs.map(doc => ({
         id: doc.id,
         data: doc.data()
       })).filter(e => e.id == info)[0])
     })
+
+    return () => cleanup;
+
+
   },[])
 
   useEffect( () => {
+
     if(roomInfo != null) {
       setPercent(Math.min(1, roomInfo.data.currentAmount / roomInfo.data.goal));
+      if(percent >= 1) {
+        setFull(true);
+      }
+
     }
   }, [roomInfo])
 
-  // const [orders, setOrders] = useState([
-  //   {
-  //     foodName: "Curry Fish Head",
-  //     amount: 1,
-  //   },
-  //   {
-  //     foodName: "Chicken Rice",
-  //     amount: 4,
-  //   },
-  //   {
-  //     foodName: "Plain Roti Prata",
-  //     amount: 5,
-  //   },
-  //   {
-  //     foodName: "Roti Prata with Egg",
-  //     amount: 6,
-  //   },
-  // ]);
-  
-  // // Hacky code for demoing the data
-  // const [totalAmount, setTotalAmount] = useState(info.goal);
-  // const [currAmount, setCurrAmount] = useState(Math.round(info.percentCompleted / 100 * info.goal));
-  // const [percent, setPercent] = useState(info.percentCompleted / 100);
-
-  // useEffect(() => {
-  //   const accumulatedAmount = 0;
-  //   orders.forEach( order => {
-  //     accumulatedAmount += order.amount;
-  //   });
-  //   setCurrAmount(accumulatedAmount);
-  // }, orders)
-
-  // Keep this code for later use
-  // useEffect(() => {
-  //   setPercent(currAmount / totalAmount);
-  // }, [currAmount]);
 
   const renderItem = ({ item }) => {
     return (
@@ -234,9 +208,8 @@ function RoomHost({ data }) {
           <View style={styles.statusBar}>
             <View
               style={{
-                backgroundColor: "#FA6E59",
+                backgroundColor:`${full ? "#4897D8" : "#FA6E59" }`,
                 borderRadius: 10,
-                // height: `{${roomInfo.data.percentCompleted}}}%`,
                 height: `${Math.floor(percent* 100)}%`,
               }}
             />

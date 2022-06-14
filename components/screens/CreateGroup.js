@@ -28,21 +28,11 @@ function CreateGroup({ navigation }) {
         storeName: store,
         deliverTo: destination,
         goal: goal,
-        orders: [
-          {
-            foodName: "Curry Fish Head",
-            amount: 1,
-            price: 2,
-          },
-          {
-            foodName: "Chicken Rice",
-            amount: 4,
-            price: 3,
-          },
-        ],
-        currentAmount: 23,
+        orders: [],
+        currentAmount: 0,
         created: Timestamp.now()
       })
+      navigation.goBack();
       // onClose()
     } catch (err) {
       alert(err)
